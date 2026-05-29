@@ -86,9 +86,14 @@ def main():
     st.set_page_config(page_title="Klasifikasi Tipe Akomodasi", page_icon="🏠")
     st.title("🏠 Klasifikasi Tipe Akomodasi — Streamlit")
 
-    st.markdown("Aplikasi ini membutuhkan file model dan preprocessor:\n
-    - `cnn_airbnb_model.h5`\n    - `scaler.pkl`\n    - `label_encoder_cnn.pkl`\n    - `feature_columns.pkl`\n
-    Jika belum ada, upload file-file tersebut di sidebar.")
+    st.markdown(
+        "Aplikasi ini membutuhkan file model dan preprocessor:\n"
+        "- `cnn_airbnb_model.h5`\n"
+        "- `scaler.pkl`\n"
+        "- `label_encoder_cnn.pkl`\n"
+        "- `feature_columns.pkl`\n\n"
+        "Jika belum ada, upload file-file tersebut di sidebar."
+    )
 
     artifacts, missing = load_artifacts()
 
