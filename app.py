@@ -101,14 +101,13 @@ def inject_style():
         }
 
         .stApp {
-            background:
-                linear-gradient(180deg, #edf7f5 0%, #f8fafc 34%, #ffffff 100%);
+            background: linear-gradient(180deg, #eef8f6 0%, #f7fafc 42%, #ffffff 100%);
             color: var(--ink);
         }
 
         .block-container {
-            max-width: 980px;
-            padding-top: 2rem;
+            max-width: 920px;
+            padding-top: 4.25rem;
             padding-bottom: 3rem;
         }
 
@@ -125,15 +124,14 @@ def inject_style():
         .app-kicker {
             display: inline-flex;
             align-items: center;
-            gap: .45rem;
-            padding: .35rem .65rem;
+            padding: .32rem .62rem;
             border: 1px solid rgba(15, 118, 110, .22);
             background: rgba(15, 118, 110, .08);
             color: var(--brand-dark);
             border-radius: 999px;
             font-size: .82rem;
             font-weight: 700;
-            margin-bottom: .75rem;
+            margin-bottom: .9rem;
         }
 
         .app-subtitle {
@@ -147,24 +145,46 @@ def inject_style():
             background: var(--panel);
             border: 1px solid var(--line);
             border-radius: 8px;
-            padding: 1.2rem 1.2rem 1.3rem;
-            box-shadow: 0 18px 45px rgba(16, 24, 40, .08);
+            padding: 1.35rem 1.35rem 1.45rem;
+            box-shadow: 0 14px 34px rgba(16, 24, 40, .08);
         }
 
         div[data-testid="stForm"] h3 {
             font-size: 1.15rem !important;
-            margin-bottom: .55rem !important;
+            margin-bottom: .75rem !important;
+        }
+
+        div[data-testid="stForm"] label,
+        div[data-testid="stForm"] label p {
+            color: var(--ink) !important;
+            font-weight: 700 !important;
+            opacity: 1 !important;
+        }
+
+        div[data-baseweb="select"] > div,
+        div[data-baseweb="input"] > div,
+        div[data-baseweb="input"] input {
+            background-color: #ffffff !important;
+            color: var(--ink) !important;
+            border-color: #cfd8e3 !important;
+        }
+
+        div[data-baseweb="select"] svg,
+        div[data-baseweb="input"] svg {
+            color: var(--ink) !important;
+            fill: var(--ink) !important;
         }
 
         div[data-testid="stFormSubmitButton"] button {
-            width: 100%;
             border-radius: 8px;
             border: 0;
             background: var(--brand);
             color: white;
             font-weight: 700;
-            min-height: 3rem;
-            margin-top: .35rem;
+            min-height: 2.8rem;
+            padding-left: 1.35rem;
+            padding-right: 1.35rem;
+            margin-top: .3rem;
         }
 
         div[data-testid="stFormSubmitButton"] button:hover {
@@ -177,7 +197,7 @@ def inject_style():
             border: 1px solid var(--line);
             border-radius: 8px;
             padding: 1.25rem;
-            box-shadow: 0 18px 45px rgba(16, 24, 40, .08);
+            box-shadow: 0 14px 34px rgba(16, 24, 40, .08);
             margin-top: 1.2rem;
         }
 
