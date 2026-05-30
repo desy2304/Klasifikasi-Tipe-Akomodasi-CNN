@@ -209,53 +209,12 @@ def render_input_form(groups, neighbourhoods):
                 index=neighbourhoods.index("Chelsea") if "Chelsea" in neighbourhoods else 0,
             )
             price = st.number_input("Price", min_value=0.0, value=DEFAULTS["price"], step=10.0)
+
+        with col2:
             minimum_nights = st.number_input(
                 "Minimum Nights",
                 min_value=1,
                 value=DEFAULTS["minimum_nights"],
-                step=1,
-            )
-            availability_365 = st.number_input(
-                "Availability 365",
-                min_value=0,
-                max_value=365,
-                value=DEFAULTS["availability_365"],
-                step=1,
-            )
-            latitude = st.number_input(
-                "Latitude",
-                value=DEFAULTS["latitude"],
-                format="%.6f",
-            )
-            longitude = st.number_input(
-                "Longitude",
-                value=DEFAULTS["longitude"],
-                format="%.6f",
-            )
-
-        with col2:
-            number_of_reviews = st.number_input(
-                "Number of Reviews",
-                min_value=0,
-                value=DEFAULTS["number_of_reviews"],
-                step=1,
-            )
-            reviews_per_month = st.number_input(
-                "Reviews per Month",
-                min_value=0.0,
-                value=DEFAULTS["reviews_per_month"],
-                step=0.1,
-            )
-            number_of_reviews_ltm = st.number_input(
-                "Reviews Last 12 Months",
-                min_value=0,
-                value=DEFAULTS["number_of_reviews_ltm"],
-                step=1,
-            )
-            calculated_host_listings_count = st.number_input(
-                "Host Listings Count",
-                min_value=1,
-                value=DEFAULTS["calculated_host_listings_count"],
                 step=1,
             )
             rating = st.number_input(
@@ -265,9 +224,7 @@ def render_input_form(groups, neighbourhoods):
                 value=DEFAULTS["rating"],
                 step=0.1,
             )
-            bedrooms = st.number_input("Bedrooms", min_value=0, value=DEFAULTS["bedrooms"], step=1)
             beds = st.number_input("Beds", min_value=0, value=DEFAULTS["beds"], step=1)
-            baths = st.number_input("Baths", min_value=0.0, value=DEFAULTS["baths"], step=0.5)
 
         submitted = st.form_submit_button("Klasifikasikan")
 
@@ -276,17 +233,17 @@ def render_input_form(groups, neighbourhoods):
         "neighbourhood": neighbourhood,
         "price": price,
         "minimum_nights": minimum_nights,
-        "number_of_reviews": number_of_reviews,
-        "reviews_per_month": reviews_per_month,
-        "availability_365": availability_365,
-        "calculated_host_listings_count": calculated_host_listings_count,
-        "latitude": latitude,
-        "longitude": longitude,
-        "number_of_reviews_ltm": number_of_reviews_ltm,
+        "number_of_reviews": DEFAULTS["number_of_reviews"],
+        "reviews_per_month": DEFAULTS["reviews_per_month"],
+        "availability_365": DEFAULTS["availability_365"],
+        "calculated_host_listings_count": DEFAULTS["calculated_host_listings_count"],
+        "latitude": DEFAULTS["latitude"],
+        "longitude": DEFAULTS["longitude"],
+        "number_of_reviews_ltm": DEFAULTS["number_of_reviews_ltm"],
         "rating": rating,
-        "bedrooms": bedrooms,
+        "bedrooms": DEFAULTS["bedrooms"],
         "beds": beds,
-        "baths": baths,
+        "baths": DEFAULTS["baths"],
     }
     return submitted, listing
 
