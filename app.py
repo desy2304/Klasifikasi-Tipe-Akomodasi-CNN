@@ -85,6 +85,166 @@ DEFAULTS = {
 }
 
 
+def inject_style():
+    st.markdown(
+        """
+        <style>
+        :root {
+            --ink: #17202a;
+            --muted: #667085;
+            --line: #d8dee8;
+            --panel: #ffffff;
+            --soft: #f6f8fb;
+            --brand: #0f766e;
+            --brand-dark: #115e59;
+            --accent: #f59e0b;
+        }
+
+        .stApp {
+            background:
+                linear-gradient(180deg, #edf7f5 0%, #f8fafc 34%, #ffffff 100%);
+            color: var(--ink);
+        }
+
+        .block-container {
+            max-width: 980px;
+            padding-top: 2rem;
+            padding-bottom: 3rem;
+        }
+
+        h1, h2, h3 {
+            letter-spacing: 0;
+        }
+
+        h1 {
+            font-size: 2.35rem !important;
+            line-height: 1.12 !important;
+            margin-bottom: .35rem !important;
+        }
+
+        .app-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: .45rem;
+            padding: .35rem .65rem;
+            border: 1px solid rgba(15, 118, 110, .22);
+            background: rgba(15, 118, 110, .08);
+            color: var(--brand-dark);
+            border-radius: 999px;
+            font-size: .82rem;
+            font-weight: 700;
+            margin-bottom: .75rem;
+        }
+
+        .app-subtitle {
+            color: var(--muted);
+            max-width: 720px;
+            font-size: 1.02rem;
+            margin: 0 0 1.35rem 0;
+        }
+
+        div[data-testid="stForm"] {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 1.2rem 1.2rem 1.3rem;
+            box-shadow: 0 18px 45px rgba(16, 24, 40, .08);
+        }
+
+        div[data-testid="stForm"] h3 {
+            font-size: 1.15rem !important;
+            margin-bottom: .55rem !important;
+        }
+
+        div[data-testid="stFormSubmitButton"] button {
+            width: 100%;
+            border-radius: 8px;
+            border: 0;
+            background: var(--brand);
+            color: white;
+            font-weight: 700;
+            min-height: 3rem;
+            margin-top: .35rem;
+        }
+
+        div[data-testid="stFormSubmitButton"] button:hover {
+            background: var(--brand-dark);
+            color: white;
+        }
+
+        .result-panel {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 1.25rem;
+            box-shadow: 0 18px 45px rgba(16, 24, 40, .08);
+            margin-top: 1.2rem;
+        }
+
+        .result-label {
+            color: var(--muted);
+            font-size: .86rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+
+        .result-value {
+            color: var(--ink);
+            font-size: 2rem;
+            line-height: 1.12;
+            font-weight: 800;
+            margin-top: .2rem;
+        }
+
+        .confidence-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: .4rem .7rem;
+            background: rgba(245, 158, 11, .14);
+            color: #92400e;
+            border: 1px solid rgba(245, 158, 11, .28);
+            border-radius: 999px;
+            font-weight: 800;
+            margin-top: .75rem;
+        }
+
+        .prob-row {
+            margin-top: .85rem;
+        }
+
+        .prob-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            color: var(--ink);
+            font-size: .94rem;
+            font-weight: 700;
+            margin-bottom: .35rem;
+        }
+
+        .prob-track {
+            height: .68rem;
+            background: #e8edf3;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .prob-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--brand), var(--accent));
+            border-radius: inherit;
+        }
+
+        .stDataFrame {
+            margin-top: .6rem;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def enable_numpy_pickle_compatibility():
     """Allow numpy-2 pickles to load on older numpy builds used by TensorFlow."""
     try:
@@ -248,9 +408,58 @@ def render_input_form(groups, neighbourhoods):
     return submitted, listing
 
 
+def render_result(result):
+    probabilities = pd.DataFrame(
+        {
+            "Tipe Akomodasi": list(result["probabilities"].keys()),
+            "Probabilitas (%)": list(result["probabilities"].values()),
+        }
+    ).sort_values("Probabilitas (%)", ascending=False)
+
+    st.markdown('<div class="result-panel">', unsafe_allow_html=True)
+    st.markdown(
+        f"""
+        <div class="result-label">Hasil Klasifikasi</div>
+        <div class="result-value">{result["label"]}</div>
+        <div class="confidence-pill">Confidence {result["confidence"]:.2f}%</div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    for _, row in probabilities.iterrows():
+        value = float(row["Probabilitas (%)"])
+        st.markdown(
+            f"""
+            <div class="prob-row">
+                <div class="prob-head">
+                    <span>{row["Tipe Akomodasi"]}</span>
+                    <span>{value:.2f}%</span>
+                </div>
+                <div class="prob-track">
+                    <div class="prob-fill" style="width: {max(0, min(value, 100)):.2f}%"></div>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    st.dataframe(probabilities, hide_index=True, use_container_width=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+
+
 def main():
-    st.set_page_config(page_title="Klasifikasi Tipe Akomodasi", page_icon=":house:")
+    st.set_page_config(
+        page_title="Klasifikasi Tipe Akomodasi",
+        page_icon=":house:",
+        layout="centered",
+    )
+    inject_style()
+    st.markdown('<div class="app-kicker">CNN Classification</div>', unsafe_allow_html=True)
     st.title("Klasifikasi Tipe Akomodasi Airbnb NYC")
+    st.markdown(
+        '<p class="app-subtitle">Masukkan data listing utama untuk memprediksi tipe akomodasi berdasarkan model CNN.</p>',
+        unsafe_allow_html=True,
+    )
 
     artifacts, missing = load_artifacts()
     if missing:
@@ -268,17 +477,7 @@ def main():
             st.error(f"Gagal melakukan klasifikasi: {error}")
             st.stop()
 
-        st.subheader("Hasil Klasifikasi")
-        st.metric("Tipe Akomodasi", result["label"], f"{result['confidence']:.2f}%")
-
-        probabilities = pd.DataFrame(
-            {
-                "Tipe Akomodasi": list(result["probabilities"].keys()),
-                "Probabilitas (%)": list(result["probabilities"].values()),
-            }
-        ).sort_values("Probabilitas (%)", ascending=False)
-        st.bar_chart(probabilities, x="Tipe Akomodasi", y="Probabilitas (%)")
-        st.dataframe(probabilities, hide_index=True, use_container_width=True)
+        render_result(result)
 
 
 if __name__ == "__main__":
