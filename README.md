@@ -1,4 +1,4 @@
-# Klasifikasi Tipe Akomodasi — Streamlit App
+# Klasifikasi Tipe Akomodasi - Streamlit App
 
 Langkah cepat untuk deploy ke Streamlit Community Cloud:
 
@@ -11,9 +11,9 @@ Langkah cepat untuk deploy ke Streamlit Community Cloud:
 
 3. Buat repository di GitHub dan push semua file (`git init` / `git remote add origin ...` / `git push`).
 
-4. Buka https://share.streamlit.io → "New app" → pilih repository, branch, dan `app.py` sebagai main file → Deploy.
+4. Buka https://share.streamlit.io -> "New app" -> pilih repository, branch, dan `app.py` sebagai main file -> Deploy.
 
-5. Jika aplikasi membutuhkan secret atau URL untuk model, atur environment variables di Streamlit Cloud (Settings → Secrets).
+5. Jika aplikasi membutuhkan secret atau URL untuk model, atur environment variables di Streamlit Cloud (Settings -> Secrets).
 
 Catatan:
 - Jika Anda ingin saya menambahkan fungsi download model otomatis dari URL, beri tahu URL model Anda atau izinkan saya membuat placeholder untuk `MODEL_URL`.

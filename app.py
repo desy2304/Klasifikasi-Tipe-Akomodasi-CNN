@@ -83,8 +83,8 @@ def klasifikasi_akomodasi_streamlit(listing_baru, artifacts):
 
 
 def main():
-    st.set_page_config(page_title="Klasifikasi Tipe Akomodasi", page_icon="🏠")
-    st.title("🏠 Klasifikasi Tipe Akomodasi — Streamlit")
+    st.set_page_config(page_title="Klasifikasi Tipe Akomodasi", page_icon=":house:")
+    st.title("Klasifikasi Tipe Akomodasi - Streamlit")
 
     st.markdown(
         "Aplikasi ini membutuhkan file model dan preprocessor:\n"
@@ -106,7 +106,7 @@ def main():
                 if uploaded is not None:
                     saved = save_uploaded_file(uploaded, m)
                     if saved:
-                        st.success(f"Tersimpan: {m} — silakan muat ulang aplikasi (Refresh)")
+                        st.success(f"Tersimpan: {m} - silakan muat ulang aplikasi (Refresh)")
         else:
             st.success("Semua artefak ditemukan dan siap digunakan.")
 
