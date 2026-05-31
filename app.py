@@ -106,8 +106,8 @@ def inject_style():
         }
 
         .block-container {
-            max-width: 920px;
-            padding-top: 4.25rem;
+            max-width: 780px;
+            padding-top: 3.2rem;
             padding-bottom: 3rem;
         }
 
@@ -116,7 +116,7 @@ def inject_style():
         }
 
         h1 {
-            font-size: 2.35rem !important;
+            font-size: 2rem !important;
             line-height: 1.12 !important;
             margin-bottom: .35rem !important;
         }
@@ -137,16 +137,16 @@ def inject_style():
         .app-subtitle {
             color: var(--muted);
             max-width: 720px;
-            font-size: 1.02rem;
-            margin: 0 0 1.35rem 0;
+            font-size: .98rem;
+            margin: 0 0 1.2rem 0;
         }
 
         div[data-testid="stForm"] {
             background: var(--panel);
             border: 1px solid var(--line);
             border-radius: 8px;
-            padding: 1.35rem 1.35rem 1.45rem;
-            box-shadow: 0 14px 34px rgba(16, 24, 40, .08);
+            padding: 1.15rem 1.15rem 1.25rem;
+            box-shadow: 0 12px 28px rgba(16, 24, 40, .07);
         }
 
         div[data-testid="stForm"] h3 {
@@ -176,6 +176,7 @@ def inject_style():
         }
 
         div[data-testid="stFormSubmitButton"] button {
+            width: 100%;
             border-radius: 8px;
             border: 0;
             background: var(--brand);
@@ -190,15 +191,6 @@ def inject_style():
         div[data-testid="stFormSubmitButton"] button:hover {
             background: var(--brand-dark);
             color: white;
-        }
-
-        .result-panel {
-            background: var(--panel);
-            border: 1px solid var(--line);
-            border-radius: 8px;
-            padding: 1.25rem;
-            box-shadow: 0 14px 34px rgba(16, 24, 40, .08);
-            margin-top: 1.2rem;
         }
 
         .result-label {
@@ -227,33 +219,6 @@ def inject_style():
             border-radius: 999px;
             font-weight: 800;
             margin-top: .75rem;
-        }
-
-        .prob-row {
-            margin-top: .85rem;
-        }
-
-        .prob-head {
-            display: flex;
-            justify-content: space-between;
-            gap: 1rem;
-            color: var(--ink);
-            font-size: .94rem;
-            font-weight: 700;
-            margin-bottom: .35rem;
-        }
-
-        .prob-track {
-            height: .68rem;
-            background: #e8edf3;
-            border-radius: 999px;
-            overflow: hidden;
-        }
-
-        .prob-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--brand), var(--accent));
-            border-radius: inherit;
         }
 
         .stDataFrame {
@@ -383,14 +348,17 @@ def render_input_form(groups, neighbourhoods):
                 groups,
                 index=groups.index("Manhattan") if "Manhattan" in groups else 0,
             )
+        with col2:
             neighbourhood = st.selectbox(
                 "Neighbourhood",
                 neighbourhoods,
                 index=neighbourhoods.index("Chelsea") if "Chelsea" in neighbourhoods else 0,
             )
-            price = st.number_input("Price", min_value=0.0, value=DEFAULTS["price"], step=10.0)
 
-        with col2:
+        col3, col4 = st.columns(2)
+        with col3:
+            price = st.number_input("Price", min_value=0.0, value=DEFAULTS["price"], step=10.0)
+        with col4:
             minimum_nights = st.number_input(
                 "Minimum Nights",
                 min_value=1,
@@ -428,35 +396,25 @@ def render_result(result):
         }
     ).sort_values("Probabilitas (%)", ascending=False)
 
-    st.markdown('<div class="result-panel">', unsafe_allow_html=True)
-    st.markdown(
-        f"""
-        <div class="result-label">Hasil Klasifikasi</div>
-        <div class="result-value">{result["label"]}</div>
-        <div class="confidence-pill">Confidence {result["confidence"]:.2f}%</div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    for _, row in probabilities.iterrows():
-        value = float(row["Probabilitas (%)"])
+    with st.container(border=True):
         st.markdown(
             f"""
-            <div class="prob-row">
-                <div class="prob-head">
-                    <span>{row["Tipe Akomodasi"]}</span>
-                    <span>{value:.2f}%</span>
-                </div>
-                <div class="prob-track">
-                    <div class="prob-fill" style="width: {max(0, min(value, 100)):.2f}%"></div>
-                </div>
-            </div>
+            <div class="result-label">Hasil Klasifikasi</div>
+            <div class="result-value">{result["label"]}</div>
+            <div class="confidence-pill">Confidence {result["confidence"]:.2f}%</div>
             """,
             unsafe_allow_html=True,
         )
 
-    st.dataframe(probabilities, hide_index=True, use_container_width=True)
-    st.markdown("</div>", unsafe_allow_html=True)
+        st.write("")
+        for _, row in probabilities.iterrows():
+            value = float(row["Probabilitas (%)"])
+            label_col, value_col = st.columns([3, 1])
+            label_col.markdown(f"**{row['Tipe Akomodasi']}**")
+            value_col.markdown(f"**{value:.2f}%**")
+            st.progress(max(0, min(value / 100, 1)))
+
+        st.dataframe(probabilities, hide_index=True, use_container_width=True)
 
 
 def main():
