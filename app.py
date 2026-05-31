@@ -397,14 +397,6 @@ def render_input_form(groups, neighbourhoods):
                 value=DEFAULTS["minimum_nights"],
                 step=1,
             )
-            rating = st.number_input(
-                "Rating",
-                min_value=0.0,
-                max_value=5.0,
-                value=DEFAULTS["rating"],
-                step=0.1,
-            )
-            beds = st.number_input("Beds", min_value=0, value=DEFAULTS["beds"], step=1)
 
         submitted = st.form_submit_button("Klasifikasikan")
 
@@ -420,9 +412,9 @@ def render_input_form(groups, neighbourhoods):
         "latitude": DEFAULTS["latitude"],
         "longitude": DEFAULTS["longitude"],
         "number_of_reviews_ltm": DEFAULTS["number_of_reviews_ltm"],
-        "rating": rating,
+        "rating": DEFAULTS["rating"],
         "bedrooms": DEFAULTS["bedrooms"],
-        "beds": beds,
+        "beds": DEFAULTS["beds"],
         "baths": DEFAULTS["baths"],
     }
     return submitted, listing
